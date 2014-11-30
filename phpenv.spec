@@ -64,7 +64,11 @@ PHPENV_REPO="https://github.com/chh/phpenv"
 sed -i -e "s|^.*For full documentation.*\$|  echo \"For full documentation, see:\"\n  echo \" rbenv: ${RBENV_REPO}#readme\"\n  echo \" phpenv: ${PHPENV_REPO}#readme\"|" libexec/phpenv-help
 
 # use pld (not debian) version of hooks dir
+# https://github.com/sstephenson/rbenv/pull/176
 sed -i -e 's#/usr/lib/phpenv/hooks#%{_appdir}/hooks#' libexec/phpenv
+
+# cleanup backups after patching
+find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
 
 %install
 rm -rf $RPM_BUILD_ROOT
