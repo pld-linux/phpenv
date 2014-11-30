@@ -11,7 +11,7 @@ License:	MIT
 Group:		Development/Languages/PHP
 Source0:	https://github.com/sstephenson/rbenv/archive/v%{version}/rbenv-%{version}.tar.gz
 # Source0-md5:	c4a15a4dccf3dc1d28d08e87fb7c7789
-Source1:	phpenv-system-php
+Source1:	%{name}-system-php
 URL:		https://github.com/CHH/phpenv
 Requires:	bash
 BuildArch:	noarch
@@ -84,6 +84,14 @@ ln -s %{_appdir}/libexec/%{name} $RPM_BUILD_ROOT%{_bindir}/%{name}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
+
+%post
+%banner %{name} -e -o <<'EOF'
+You probably want to execute the following line to add phpenv to your shell:
+
+echo 'eval "$(phpenv init -)"' >> ~/.bash_profile
+EOF
+
 
 %files
 %defattr(644,root,root,755)
