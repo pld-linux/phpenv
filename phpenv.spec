@@ -23,7 +23,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Sets up a separate rbenv environment for PHP
 
 This environment is stored in the $HOME/.phpenv directory and contains
-a phpenv executable which sets the RBENV_ROOT environment variable to
+a phpenv executable which sets the PHPENV_ROOT environment variable to
 $HOME/.phpenv.
 
 To install PHP versions, just put them to the $HOME/.phpenv/versions
