@@ -63,9 +63,12 @@ RBENV_REPO="https://github.com/sstephenson/rbenv"
 PHPENV_REPO="https://github.com/chh/phpenv"
 sed -i -e "s|^.*For full documentation.*\$|  echo \"For full documentation, see:\"\n  echo \" rbenv: ${RBENV_REPO}#readme\"\n  echo \" phpenv: ${PHPENV_REPO}#readme\"|" libexec/phpenv-help
 
+# use pld (not debian) version of hooks dir
+sed -i -e 's#/usr/lib/phpenv/hooks#%{_appdir}/hooks#' libexec/phpenv
+
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_bindir},%{_appdir}}
+install -d $RPM_BUILD_ROOT{%{_bindir},%{_appdir}/hooks}
 cp -a libexec completions $RPM_BUILD_ROOT%{_appdir}
 
 ln -s %{_appdir}/libexec/%{name} $RPM_BUILD_ROOT%{_bindir}/%{name}
@@ -81,3 +84,4 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_appdir}/libexec
 %attr(755,root,root) %{_appdir}/libexec/%{name}*
 %{_appdir}/completions
+%dir %{_appdir}/hooks
