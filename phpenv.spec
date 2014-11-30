@@ -2,6 +2,7 @@
 # - use similar recipe as done by CHH (https://github.com/CHH/phpenv)
 #   however, make it more rbenv compatible: code in /usr/share, env files in ~/.phpenv
 # - actually don't need code from CHH/phpenv as all is inlined in this .spec
+# - adds phpenv system-php to add php versions from installed system (may be renamed if better name provided)
 Summary:	Thin Wrapper around rbenv for PHP version managment
 Name:		phpenv
 Version:	0.4.0
@@ -10,6 +11,7 @@ License:	MIT
 Group:		Development/Languages/PHP
 Source0:	https://github.com/sstephenson/rbenv/archive/v%{version}/rbenv-%{version}.tar.gz
 # Source0-md5:	c4a15a4dccf3dc1d28d08e87fb7c7789
+Source1:	phpenv-system-php
 URL:		https://github.com/CHH/phpenv
 Requires:	bash
 BuildArch:	noarch
@@ -74,6 +76,9 @@ find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_bindir},%{_appdir}/hooks}
 cp -a libexec completions $RPM_BUILD_ROOT%{_appdir}
+
+# phpenv system-php: detect system php packages and create their versions
+install -p %{SOURCE1} $RPM_BUILD_ROOT%{_appdir}/libexec
 
 ln -s %{_appdir}/libexec/%{name} $RPM_BUILD_ROOT%{_bindir}/%{name}
 

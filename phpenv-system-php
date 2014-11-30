@@ -1,0 +1,37 @@
+#!/bin/sh
+# detect system php packages and create their versions
+# inspired by rbenv-alternatives:
+# https://github.com/terceiro/rbenv-alternatives
+# Author: Elan Ruusamäe <glen@pld-linux.org>
+# Date: 2014-11-30
+
+set -e
+[ -n "$PHPENV_DEBUG" ] && set -x
+
+if [ "$1" = '--version' ]; then
+	echo '0.4.0'
+	exit 0
+fi
+
+if ! which rpm >/dev/null; then
+	echo "Sorry, it seems like you do not have rpm available on your PATH."
+	echo "Are you sure this is a RPM based system?"
+	exit 1
+fi
+
+for php in /usr/bin/php??; do
+	pkg=$(rpm -qf $php) || continue
+	version=$(rpm -q --qf '%{VERSION}' $pkg)
+	# use php-X.Y only for version selection
+	version=${version%.${version#*.*.}}-pld
+	echo "* Found $php (via $pkg) using $version as version"
+
+	if [ -d "${PHPENV_ROOT}/versions/$version" ]; then
+		echo "Skipping $version, it already exists"
+	else
+		rm -rf "${PHPENV_ROOT}/versions/$version"
+		mkdir -p "${PHPENV_ROOT}/versions/$version/bin"
+		ln -s "$php" "${PHPENV_ROOT}/versions/$version/bin/php"
+		echo "Added $version"
+	fi
+done
