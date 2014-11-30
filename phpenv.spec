@@ -44,7 +44,12 @@ for f in bin/rbenv* completions/rbenv* libexec/rbenv*; do
 done
 
 # Remove all rbenv/Ruby from phpenv prefixed files
-sed -i -e 's/rbenv/phpenv/g' -e 's/RBENV/PHPENV/g' -e 's/Ruby/PHP/g' completions/phpenv* libexec/phpenv*
+sed -i \
+	-e 's/rbenv/phpenv/g' \
+	-e 's/RBENV/PHPENV/g' \
+	-e 's/Ruby/PHP/g' \
+	-e 's/ruby/php/g' \
+	completions/phpenv* libexec/phpenv*
 
 # Fix the version
 cat <<'SH' > libexec/phpenv---version
