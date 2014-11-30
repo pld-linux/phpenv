@@ -19,11 +19,11 @@ if ! which rpm >/dev/null; then
 	exit 1
 fi
 
-for php in /usr/bin/php??; do
-	pkg=$(rpm -qf $php) || continue
+for pkg in $(rpm -qa 'php*-cli'); do
 	version=$(rpm -q --qf '%{VERSION}' $pkg)
 	# use php-X.Y only for version selection
 	version=${version%.${version#*.*.}}-pld
+	php=$(rpm -ql $pkg | grep /usr/bin)
 	echo "* Found $php (via $pkg) using $version as version"
 
 	if [ -d "${PHPENV_ROOT}/versions/$version" ]; then
